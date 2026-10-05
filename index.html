@@ -2663,7 +2663,8 @@ async function submitEmployeePhoto_(){
     if (b64.length > EMP_PHOTO_MAX_BYTES_) {
       err.textContent = T('phErrTooBig'); err.style.display=''; btn.disabled=false; return;
     }
-    const r = await attApi_({ action:'employeePhotoUpload', photoBase64: b64 });
+    const raw = await attApi_({ action:'employeePhotoUpload', photoBase64: b64 });
+    const r = (raw && raw.data && typeof raw.data === 'object') ? raw.data : raw;
     if (!r || r.status !== 'ok') { err.textContent = photoErrText_(r); err.style.display=''; btn.disabled=false; return; }
     closePhotoStep_();
     // ⛔ الصورة الجديدة pending — القفل بقى "واحدة تحت المراجعة في المرة".
