@@ -2064,7 +2064,7 @@ async function empSelf_(op, payload){
   // ⚠️ Remember Me — فحص انتهاء الجلسة على رد موجود خلاص. صفر طلب إضافي.
   const _r = await resp.json();
   handleExpiredSession_(_r);
-  return _r;
+  return (_r && _r.data && typeof _r.data === 'object') ? _r.data : _r;
 }
 
 function empEsc_(s){ return String(s == null ? '' : s)
@@ -2172,7 +2172,7 @@ function setNotifBadge_(n){
 async function refreshNotifBadge_(){
   try {
     const r = await empSelf_('notifBadge');
-    setNotifBadge_(r && r.status === 'ok' ? r.unread : 0);
+    setNotifBadge_(r && r.status === 'ok' ? (r.unread ?? r.count) : 0);
   } catch (err) { setNotifBadge_(0); }
 }
 
