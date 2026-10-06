@@ -2196,7 +2196,10 @@ async function loadEmpNotifications_(){
         + '<div class="empNote warn">' + empEsc_(empErrText_(r)) + '</div></div>';
       return;
     }
-    empNotifCache_ = r.items || [];
+    empNotifCache_ = (r.notifications || []).map(n => Object.assign({}, n, {
+      readAt: (n.read === true || String(n.read).toLowerCase() === 'true') ? 'read' : '',
+      showAt: n.showDate
+    }));
     renderEmpNotifList_();
     markVisibleNotificationsRead_();
   } catch (err) {
@@ -2349,7 +2352,7 @@ async function openEmpNotif_(id){
     //    ⛔ showAt نفسها لم تُمسّ — لسه بتيجي في الرد وبتُستخدم في الوقت
     //       النسبي ("منذ كذا")، ومنطق showAt/hideAt في الـBackend زي ما هو.
     + '<div class="empRow"><b>' + empEsc_(T('nPeriod')) + '</b><span>' + empEsc_(n.period || '—') + '</span></div>';
-  if (keys.indexOf('message') !== -1 && String(n.message || '').trim()) {
+  if ((keys.indexOf('message') !== -1 || n.contents == null) && String(n.message || '').trim()) {
     head += '<div class="notifMsg" style="margin-top:10px">' + empEsc_(n.message) + '</div>';
   }
   head += '</div><div id="empNotifDetail"></div>';
