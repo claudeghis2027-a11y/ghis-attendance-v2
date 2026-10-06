@@ -2319,6 +2319,7 @@ async function openEmpNotif_(id){
   empNotifOpenId_ = String(n.id);
   const el = document.getElementById('empNotifSection');
   const keys = String(n.contents || '').split(',').map(x => x.trim()).filter(x => x);
+  if (n.contents == null && String(n.type || '').trim() === 'تقرير حضور') keys.push('absenceReport');
 
   // ⬅️ التجميع الإلزامي: absence/late/deductions/monthlyClosing كلها
   //    بتتخدم من empSelf_('report') مرة واحدة بس — مش نداء لكل مفتاح.
